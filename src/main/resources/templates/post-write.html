@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글쓰기 | 마켓 프라이스</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; }
+    </style>
+</head>
+<body>
+
+<header id="main-header" class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+        <a href="/" class="text-xl font-bold text-green-600 flex items-center"><i class="fas fa-seedling mr-2"></i><span>마켓 프라이스</span></a>
+        <nav class="hidden md:flex flex-grow justify-center items-center space-x-8">
+            <a href="/" class="text-gray-500 hover:text-green-600 transition duration-300">도매가격</a>
+            <a href="/community.html" class="text-gray-800 hover:text-green-600 transition duration-300 font-semibold border-b-2 border-green-500 pb-1">커뮤니티</a>
+        </nav>
+        <div id="user-info" class="hidden items-center space-x-4">
+            <span id="username-display" class="font-semibold text-gray-700"></span>
+            <button id="logout-button" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">로그아웃</button>
+        </div>
+    </div>
+</header>
+
+<main class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-6 border-b pb-4">새 글 작성</h1>
+        <form id="post-form">
+            <div class="mb-6">
+                <label for="market-select" class="block text-sm font-medium text-gray-700 mb-1">게시판 선택</label>
+                <select id="market-select" name="market" required class="w-full p-2 border border-gray-300 rounded-md bg-white focus:ring-green-500 focus:border-green-500">
+                    <option value="">-- 시장을 선택하세요 --</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label for="post-title" class="block text-sm font-medium text-gray-700 mb-1">제목</label>
+                <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요" required maxlength="100" class="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500">
+            </div>
+            <div class="mb-6">
+                <label for="post-content" class="block text-sm font-medium text-gray-700 mb-1">내용 (500자 이내)</label>
+                <textarea id="post-content" name="content" rows="12" placeholder="내용을 입력하세요" required maxlength="500" class="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"></textarea>
+            </div>
+            <div class="flex justify-end gap-4">
+                <a href="/community.html" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">취소</a>
+                <button type="submit" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">등록</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    function parseJwt(token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload;
+        } catch (e) { return null; }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem('jwt-token');
+        if (!token) {
+            alert('로그인이 필요한 기능입니다.');
+            window.location.href = '/login.html';
+            return;
+        }
+
+        const userInfo = document.getElementById('user-info');
+        const payload = parseJwt(token);
+        if (payload) {
+            document.getElementById('username-display').textContent = `${payload.sub}님`;
+        }
+        userInfo.classList.remove('hidden');
+        userInfo.classList.add('md:flex');
+
+        document.getElementById('logout-button')?.addEventListener('click', () => {
+            localStorage.removeItem('jwt-token');
+            alert('로그아웃 되었습니다.');
+            window.location.href = '/';
+        });
+
+        const marketSelect = document.getElementById('market-select');
+        const postForm = document.getElementById('post-form');
+
+        async function fetchMarketsForSelect() {
+            try {
+                const response = await fetch('/api/markets');
+                const markets = await response.json();
+                markets.forEach(market => {
+                    const option = document.createElement('option');
+                    option.value = market.id;
+                    option.textContent = market.name;
+                    marketSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("시장 목록 로딩 실패:", error);
+            }
+        }
+
+        postForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const postData = {
+                marketId: document.getElementById('market-select').value,
+                title: document.getElementById('post-title').value,
+                content: document.getElementById('post-content').value
+            };
+
+            if (!postData.marketId) {
+                alert('게시판을 선택해주세요.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                if (response.ok) {
+                    alert('게시글이 성공적으로 등록되었습니다.');
+                    window.location.href = '/community.html';
+                } else {
+                    const errorMsg = await response.text();
+                    alert(`등록 실패: ${errorMsg}`);
+                }
+            } catch (error) {
+                console.error("글쓰기 요청 실패:", error);
+                alert('글 등록 중 오류가 발생했습니다.');
+            }
+        });
+
+        fetchMarketsForSelect();
+    });
+</script>
+</body>
+</html>
