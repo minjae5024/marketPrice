@@ -2,7 +2,7 @@ package minjae5024.marketPrice.config;
 
 import minjae5024.marketPrice.jwt.JwtAuthenticationFilter;
 import minjae5024.marketPrice.jwt.JwtUtil;
-import minjae5024.marketPrice.security.UserDetailsServiceImpl;
+import minjae5024.marketPrice.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

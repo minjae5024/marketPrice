@@ -7,7 +7,6 @@ import minjae5024.marketPrice.entity.User;
 import minjae5024.marketPrice.repository.MarketRepository;
 import minjae5024.marketPrice.repository.PostRepository;
 import minjae5024.marketPrice.repository.UserRepository;
-import minjae5024.marketPrice.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

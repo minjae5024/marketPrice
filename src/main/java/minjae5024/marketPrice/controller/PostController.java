@@ -1,7 +1,7 @@
 package minjae5024.marketPrice.controller;
 
 import minjae5024.marketPrice.dto.PostDto;
-import minjae5024.marketPrice.security.UserDetailsImpl;
+import minjae5024.marketPrice.service.UserDetailsImpl;
 import minjae5024.marketPrice.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class PostController {
             @Valid @RequestBody PostDto.Request requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.createPost(requestDto, userDetails);
-        return ResponseEntity.ok("게시글이 성공적으로 등록되었습니다.");
+        return ResponseEntity.ok("게시글이 등록되었습니다.");
     }
 
     @DeleteMapping("/{postId}")

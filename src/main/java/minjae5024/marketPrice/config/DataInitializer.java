@@ -29,7 +29,6 @@ public class DataInitializer implements CommandLineRunner {
 
     private void initializeMarketData() {
         if (marketRepository.count() == 0) {
-            log.info("Initializing market data...");
             List<Market> marketsToSave = List.of(
                     new Market("0110253", "서울 양곡도매", 37.4586, 127.0366),
                     new Market("0210022", "부산 부전", 35.1583, 129.0596),
@@ -44,13 +43,11 @@ public class DataInitializer implements CommandLineRunner {
                     new Market("0250112", "대전 역전", 36.3316, 127.4341)
             );
             marketRepository.saveAll(marketsToSave);
-            log.info("Saved {} markets to the database.", marketsToSave.size());
         }
     }
 
     private void initializeProductCodeData() {
         if (productCodeRepository.count() == 0) {
-            log.info("Initializing product code data...");
             Map<String, String> productMap = Map.ofEntries(
                     Map.entry("111", "쌀"), Map.entry("112", "찹쌀"), Map.entry("141", "콩"), Map.entry("142", "팥"),
                     Map.entry("143", "녹두"), Map.entry("144", "메밀"), Map.entry("151", "고구마"), Map.entry("152", "감자"),
@@ -76,7 +73,6 @@ public class DataInitializer implements CommandLineRunner {
                     .collect(Collectors.toList());
 
             productCodeRepository.saveAll(productCodes);
-            log.info("Saved {} product codes to the database.", productCodes.size());
         }
     }
 }

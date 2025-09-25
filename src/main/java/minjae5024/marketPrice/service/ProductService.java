@@ -52,7 +52,7 @@ public class ProductService {
 
     private List<PriceItemDto> getProductsByCategory(String category, String mrktCd, String queryDate) {
         List<ProductCategory> categoriesToFetch = new ArrayList<>();
-        if (category == null || "ALL".equalsIgnoreCase(category)) {
+        if (category == null || category.equalsIgnoreCase("ALL")) {
             categoriesToFetch.addAll(Arrays.asList(ProductCategory.values()));
         } else {
             try {
@@ -72,7 +72,7 @@ public class ProductService {
 
     private boolean isSuccessfulResponse(ApiResponseDto<PriceItemDto> response) {
         return response != null && response.getResultData() != null &&
-                response.getResultData().getResult() != null && "INFO-000".equals(response.getResultData().getResult().getCode()) &&
+                response.getResultData().getResult() != null && response.getResultData().getResult().getCode().equals("INFO-000") &&
                 response.getResultData().getRow() != null;
     }
 }

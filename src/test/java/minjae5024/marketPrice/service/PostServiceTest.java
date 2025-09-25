@@ -7,7 +7,6 @@ import minjae5024.marketPrice.entity.User;
 import minjae5024.marketPrice.repository.MarketRepository;
 import minjae5024.marketPrice.repository.PostRepository;
 import minjae5024.marketPrice.repository.UserRepository;
-import minjae5024.marketPrice.security.UserDetailsImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

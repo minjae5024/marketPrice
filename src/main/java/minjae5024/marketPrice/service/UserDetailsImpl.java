@@ -1,4 +1,4 @@
-package minjae5024.marketPrice.security;
+package minjae5024.marketPrice.service;
 
 import minjae5024.marketPrice.entity.User;
 import org.springframework.security.core.GrantedAuthority;

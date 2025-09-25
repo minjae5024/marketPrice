@@ -61,9 +61,6 @@ public class ApiService {
                 .uri(fullUrl)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<ApiResponseDto<PriceItemDto>>() {})
-                .onErrorResume(e -> {
-                    log.error("API Call failed for URL: {} | Error: {}", fullUrl, e.getMessage());
-                    return Mono.just(new ApiResponseDto<>());
-                });
+                .onErrorResume(e -> Mono.just(new ApiResponseDto<>()));
     }
 }
