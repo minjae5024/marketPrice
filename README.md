@@ -10,9 +10,9 @@
 
 ---
 
-###  **Live Demo & API Docs**
+###  **프로젝트 URL & API 문서**
 
-- **[Live Demo URL](http://15.164.234.103:8080)**
+- **[프로젝트 URL](http://15.164.234.103:8080)**
 - **[API 문서 (Swagger)](http://15.164.234.103:8080/swagger-ui/index.html)**
 
 ---
