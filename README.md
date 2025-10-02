@@ -12,8 +12,8 @@
 
 ###  **프로젝트 URL & API 문서**
 
-- **[프로젝트 URL](http://15.164.234.103:8080)**
-- **[API 문서 (Swagger)](http://15.164.234.103:8080/swagger-ui/index.html)**
+- **[프로젝트 URL](http://3.34.46.39:8080)**
+- **[API 문서 (Swagger)](http://3.34.46.39:8080/swagger-ui/index.html)**
 
 ---
 
